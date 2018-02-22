@@ -1,0 +1,13 @@
+Instructions:
+	Find/land on planets filled with resources and find grayed out planets to 
+	revive them and increase your score.
+	Try not to take too much resources from a single planet.
+Controls:
+SpaceBar - thrust
+A and D - Rotation
+
+
+Credits:
+Sounds -BFXR
+SpaceBackground - https://opengameart.org/
+icons - http://game-icons.net/
