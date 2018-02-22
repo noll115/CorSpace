@@ -25,6 +25,8 @@ public class Planet : MonoBehaviour {
 	public float finalDeg;
 	public float playerDist;
 	public Vector3 initPos;
+	DistanceJoint2D joint1;
+	DistanceJoint2D joint2;
 
 	private void Awake() {
 		if(!parent) {
@@ -100,14 +102,9 @@ public class Planet : MonoBehaviour {
 	private void RotatePlayer(RaycastHit2D hit, Vector3 dist) {
 		float angleDif = Vector2.SignedAngle(con.transform.up, hit.normal);
 		float playerDist = 1- dist.sqrMagnitude / initPos.sqrMagnitude;
-		//print(1- (dist.sqrMagnitude / posStart));
 		con.rigid.rotation = Mathf.Lerp(con.rigid.rotation, angleDif + con.rigid.rotation, playerDist/10);
-		//print(con.velocity.magnitude);
-		//print(Mathf.Abs(angleDif));
 		if(playerOnPlanet && Mathf.Abs(angleDif) < 2 && con.velocity.sqrMagnitude < 4 && !Input.GetButton("Thrust")) {
-			//print(con.velocity.sqrMagnitude);
-			RotateWithPlanet(con);
-			//print("Collecting");
+			//RotateWithPlanet(con);
 			con.canRotate = false;
 			playerAction = true;
 			PlayerAction(con.pResources);

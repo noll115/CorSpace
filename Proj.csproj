@@ -412,6 +412,7 @@
     <Compile Include="Assets\SpaceGenerator.cs" />
     <Compile Include="Assets\SpawnablePlanet.cs" />
     <Compile Include="Assets\SpriteManager.cs" />
+    <Compile Include="Assets\TestPlanet.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />

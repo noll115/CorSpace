@@ -33,11 +33,31 @@ public class RocketController : MonoBehaviour {
 	public ResourceText rCanvas;
 	public delegate void EnterPlanet();
 	public event EnterPlanet OnPlayerChangePlanet;
+	public float rayX;
+	public float rayY;
+	public LayerMask planetLayer;
+	RaycastHit2D[] hits = new RaycastHit2D[2];
+	DistanceJoint2D[] joints;
+
+	private void OnDrawGizmos() {
+		//joints = GetComponents<DistanceJoint2D>();
+		Vector3 ray1Pos = new Vector3();
+		ray1Pos = transform.position + ((transform.right) * rayX) + ((transform.up)) * rayY;
+		Vector3 ray2Pos = new Vector3();
+		ray2Pos = transform.position - ((transform.right) * rayX) + ((transform.up)) * rayY;
+		Gizmos.DrawRay(ray1Pos, -transform.up);
+		Gizmos.DrawRay(ray2Pos, -transform.up);
+		//joints[0].anchor = transform.InverseTransformPoint(transform.position + ((transform.right) * rayX) + (((transform.up)) * rayY));
+		//joints[1].anchor = transform.InverseTransformPoint(transform.position + ((transform.right) * -rayX) + (((transform.up)) * rayY));
+	}
 
 	private void Awake() {
 		thrustParticle.Stop();
 		rigid = GetComponent<Rigidbody2D>();
 		pResources = GetComponent<PlayerResources>();
+		joints = GetComponents<DistanceJoint2D>();
+		joints[0].anchor = transform.InverseTransformPoint(transform.position + ((transform.right) * rayX) + (((transform.up)) * rayY));
+		joints[1].anchor = transform.InverseTransformPoint(transform.position + ((transform.right) * -rayX) + (((transform.up)) * rayY));
 	}
 
 
@@ -99,6 +119,26 @@ public class RocketController : MonoBehaviour {
 
 	public void InstaDeath() {
 		pResources.PlayerHit(100f);
+	}
+
+	public void MakeJoints(Rigidbody2D rigid) {
+		joints[0].enabled = true;
+		joints[1].enabled = true;
+		Vector2 ray1 = transform.position + ((transform.right) * rayX) + ((transform.up)) * rayY;
+		Vector2 ray2 = transform.position - ((transform.right) * rayX) + ((transform.up)) * rayY;
+		hits[0] = Physics2D.Raycast(ray1, -transform.up, 1f,planetLayer );
+		hits[1] = Physics2D.Raycast(ray2, -transform.up, 1f, planetLayer);
+		joints[0].connectedBody = rigid;
+		joints[1].connectedBody = rigid;
+		joints[0].connectedAnchor = rigid.transform.InverseTransformPoint( hits[0].point);
+		joints[1].connectedAnchor = rigid.transform.InverseTransformPoint(hits[1].point);
+	}
+
+	public void DisableJoints() {
+		joints[0].connectedBody = null;
+		joints[1].connectedBody = null;
+		joints[0].enabled = false;
+		joints[1].enabled = false;
 	}
 
 	public void SetCell(int row,int col) {
