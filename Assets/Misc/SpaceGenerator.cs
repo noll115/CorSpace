@@ -5,7 +5,7 @@ public class SpaceGenerator : MonoBehaviour {
 
 	public SpawnablePlanet[] spawnablePlanets;
 	public static SpaceCell[,] cells = new SpaceCell[3, 3];
-	public float planetRadius = 3;
+	public float planetRadius = 2.95f;
 	public int cellx;
 	public int celly;
 	public int NumOfCells;
@@ -18,15 +18,17 @@ public class SpaceGenerator : MonoBehaviour {
 	public LayerMask planetMask;
 	public LayerMask playerMask;
 	public GameObject[] Obstacles;
+	public GameObject obstacleParent;
+	GameObject[] obsParents;
 
 
 	[ContextMenu("Generate Cell")]
 	public void Generate() {
 		GameObject Parent = new GameObject("Cells");
 		int row = 0;
-		for(int i = 1;i > -2;i--) {
+		for (int i = 1; i > -2; i--) {
 			int col = 0;
-			for(int j = -1;j < 2;j++) {
+			for (int j = -1; j < 2; j++) {
 				List<BarrenPlanet> barrenPlanets = new List<BarrenPlanet>();
 				List<ResourcePlanet> resourcePlanets = new List<ResourcePlanet>();
 				SpaceCell Cell = new GameObject("Cell " + row + ":" + col).AddComponent<SpaceCell>();
@@ -49,15 +51,15 @@ public class SpaceGenerator : MonoBehaviour {
 		//}
 	}
 
-	
+
 
 	public void CreatePlanets(List<BarrenPlanet> bPlanets, List<ResourcePlanet> rPlanets, Vector2 cellPos) {
 		PlanetInfo pi;
 		ResourcePlanet rp;
 		BarrenPlanet bp;
-		for(int i = 0;i < maxPlanetsSpawned;i++) {
+		for (int i = 0; i < maxPlanetsSpawned; i++) {
 			pi = GeneratePlanetInfo(cellPos);
-			switch(pi.planetType) {
+			switch (pi.planetType) {
 				case Planets.RESOURCE:
 					rp = GameObject.Instantiate(resourcePlanet).GetComponent<ResourcePlanet>();
 					rPlanets.Add(rp);
@@ -84,10 +86,10 @@ public class SpaceGenerator : MonoBehaviour {
 	public PlanetInfo GeneratePlanetInfo(Vector2 cell) {
 		PlanetInfo pi = ScriptableObject.CreateInstance<PlanetInfo>();
 		float size = Random.Range(1f, 1.5f);
-		pi.size = new Vector3(size, size,1);
+		pi.size = new Vector3(size, size, 1);
 		pi.planetType = GeneratePlanetType();
 		pi.startRot = Random.Range(0, 360f);
-		if(pi.planetType == Planets.RESOURCE) {
+		if (pi.planetType == Planets.RESOURCE) {
 			pi.lavaAmount = Random.Range(100, 151);
 			pi.maxLava = pi.lavaAmount;
 			pi.waterAmount = Random.Range(100, 151);
@@ -111,12 +113,12 @@ public class SpaceGenerator : MonoBehaviour {
 	Vector2 PosInSquare(Vector2 cellPos, Vector3 planetSize) {
 		bool goodPos = false;
 		Vector2 pos = Vector2.zero;
-		while(!goodPos) {
+		while (!goodPos) {
 			pos = cellPos;
 			int xpos = Random.Range(-cellSize / 2 + (cellSize / 8), cellSize / 2 - (cellSize / 8));
 			int ypos = Random.Range(-cellSize / 2 + (cellSize / 8), cellSize / 2 - (cellSize / 8));
 			pos += new Vector2(xpos, ypos);
-			if(!Physics2D.CircleCast(pos, 15, Vector2.zero, 0, planetMask) && !Physics2D.CircleCast(pos, 10, Vector2.zero, 0, playerMask)) {
+			if (!Physics2D.CircleCast(pos, 15, Vector2.zero, 0, planetMask) && !Physics2D.CircleCast(pos, 10, Vector2.zero, 0, playerMask)) {
 				goodPos = true;
 			}
 		}
@@ -133,42 +135,53 @@ public class SpaceGenerator : MonoBehaviour {
 
 	}
 	[ContextMenu("Generate PlanetWObs")]
-	public void GenerateObstacles(PlanetInfo pi, Planet planet,SpawnablePlanet spawnablePlanet ) {
-		GameObject obstacles = new GameObject("Obstacles");
-		obstacles.transform.position = planet.transform.position;
+	public void GenerateObstacles(PlanetInfo pi, Planet planet, SpawnablePlanet spawnablePlanet) {
+		if (!obstacleParent) {
+			obstacleParent = new GameObject("Obstacles");
+			obsParents = new GameObject[Obstacles.Length];
+			for (int i = 0; i < Obstacles.Length; i++)
+			{
+				obsParents[i] = new GameObject(Obstacles[i].name + "s");
+				obsParents[i].transform.SetParent(obstacleParent.transform, true);
+			}
+		}
 		float localplanetRad = planetRadius * planet.transform.localScale.x;
 		int maxNumOfObs = Random.Range(2, 6);
 		int numOfObsSpawned = 0;
 		float sections = (Mathf.PI * 2) / 6;
 		int[] anglesUsed = new int[maxNumOfObs];
-		while(numOfObsSpawned < maxNumOfObs) {
+		while (numOfObsSpawned < maxNumOfObs) {
 			bool obstaclesInWay = false;
 			RaycastHit2D hit;
+			int rndObstacle = Random.Range(0, Obstacles.Length);
 			int rndAngle = Random.Range(1, 7);
 			Vector3 anglePos = pi.position + new Vector3(Mathf.Cos(sections * rndAngle) * localplanetRad, Mathf.Sin(sections * rndAngle) * localplanetRad);
 			Vector3 dir = (pi.position - anglePos).normalized;
-			for(int i = 0;i < anglesUsed.Length;i++) {
-				if(anglesUsed[i] == rndAngle) {
+			for (int i = 0; i < anglesUsed.Length; i++) {
+				if (anglesUsed[i] == rndAngle) {
 					obstaclesInWay = true;
 				}
 			}
-			if(!obstaclesInWay) {
+			if (!obstaclesInWay) {
 				int numOfObsAtAngle = Random.Range(0, 2);
-				if(numOfObsAtAngle == 1) {
+				if (numOfObsAtAngle == 1) {
 					//spawn 1
-					Obstacle obstacleObj = GameObject.Instantiate(Obstacles[0]).GetComponent<Obstacle>();
-					obstacleObj.transform.localScale = planet.transform.localScale;
+					Transform obstacleObj = GameObject.Instantiate(Obstacles[rndObstacle]).transform;
+					planet.obsOnPlanet.Add(obstacleObj);
+					obstacleObj.localScale = planet.transform.localScale;
 					obstacleObj.GetComponent<SpriteRenderer>().color = spawnablePlanet.baseColor;
 					obstacleObj.transform.position = anglePos;
 					hit = Physics2D.Raycast(anglePos - dir, dir, anglePos.sqrMagnitude, planetMask);
 					obstacleObj.transform.up = hit.normal;
-					obstacleObj.transform.SetParent(obstacles.transform, true);
+					obstacleObj.transform.SetParent(obsParents[rndObstacle].transform, true);
 					anglesUsed[numOfObsSpawned] = rndAngle;
 				}
 				else {
 					//spawn 2
-					Obstacle obstacleObj1 = GameObject.Instantiate(Obstacles[0]).GetComponent<Obstacle>();
-					Obstacle obstacleObj2 = GameObject.Instantiate(Obstacles[0]).GetComponent<Obstacle>();
+					Transform obstacleObj1 = GameObject.Instantiate(Obstacles[rndObstacle]).transform;
+					planet.obsOnPlanet.Add(obstacleObj1);
+					Transform obstacleObj2 = GameObject.Instantiate(Obstacles[rndObstacle]).transform;
+					planet.obsOnPlanet.Add(obstacleObj2);
 					obstacleObj1.transform.localScale = planet.transform.localScale;
 					obstacleObj2.transform.localScale = planet.transform.localScale;
 					obstacleObj1.GetComponent<SpriteRenderer>().color = spawnablePlanet.baseColor;
@@ -184,21 +197,20 @@ public class SpaceGenerator : MonoBehaviour {
 					hit = Physics2D.Raycast(obstacleObj1.transform.position, dir1.normalized, anglePos.sqrMagnitude, planetMask);
 					obstacleObj1.transform.up = hit.normal;
 					obstacleObj1.transform.position -= obstacleObj1.transform.up * 0.07f;
-					obstacleObj1.transform.SetParent(obstacles.transform, true);
-					obstacleObj2.transform.SetParent(obstacles.transform, true);
+					obstacleObj1.transform.SetParent(obsParents[rndObstacle].transform, true);
+					obstacleObj2.transform.SetParent(obsParents[rndObstacle].transform, true);
 					anglesUsed[numOfObsSpawned] = rndAngle;
 				}
 				numOfObsSpawned++;
 			}
 		}
-		obstacles.transform.SetParent(planet.transform, true);
 	}
 
 
 	public Planets GeneratePlanetType() {
 		float rndPlnt = Random.value;
 		Planets planetType;
-		if(rndPlnt > 0.6f) {
+		if (rndPlnt > 0.6f) {
 			planetType = Planets.BARREN;
 		}
 		else {

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(Rigidbody2D), typeof(PointEffector2D), typeof(CircleCollider2D))]
 [SelectionBase]
@@ -6,6 +7,7 @@ public class Planet : MonoBehaviour {
 
 	static GameObject parent;
 	public SpriteRenderer planetSprite;
+	public float planetRad = 2.95f;
 	public PlanetInfo planetInfo;
 	public RocketController con;
 	public LayerMask mask;
@@ -21,6 +23,7 @@ public class Planet : MonoBehaviour {
 	public float rot;
 	public float rotSpeed;
 	public Vector3 initPos;
+	public List<Transform> obsOnPlanet;
 	bool madeJoints = false;
 
 	private void Awake() {
@@ -31,6 +34,7 @@ public class Planet : MonoBehaviour {
 		pEffector = GetComponent<PointEffector2D>();
 		rigid = GetComponent<Rigidbody2D>();
 		trig = GetComponent<CircleCollider2D>();
+		planetRad = planetRad * transform.localScale.x;
 	}
 
 
@@ -38,6 +42,10 @@ public class Planet : MonoBehaviour {
 		rot += rotSpeed * Time.deltaTime;
 		rot %= 360;
 		rigid.rotation = rot;
+		for (int i = 0; i < obsOnPlanet.Count; i++)
+		{
+			obsOnPlanet[i].transform.position = transform.position + new Vector3(Mathf.Cos(rot*Mathf.Deg2Rad)*planetRad, Mathf.Sin(rot*Mathf.Deg2Rad)*planetRad);
+		}
 	}
 
 	public virtual void SetUpPlanet(PlanetInfo p) {
@@ -170,12 +178,20 @@ public class Planet : MonoBehaviour {
 				asteroids[i].gameObject.SetActive(false);
 			}
 		}
+		for (int i = 0; i < obsOnPlanet.Count; i++) {
+			obsOnPlanet[i].gameObject.SetActive(false);
+		}
 	}
 
 	private void OnEnable() {
 		if(asteroids != null) {
 			for(int i = 0;i < asteroids.Length;i++) {
 				asteroids[i].gameObject.SetActive(true);
+			}
+		}
+		if (obsOnPlanet != null) {
+			for (int i = 0; i < obsOnPlanet.Count; i++) {
+				obsOnPlanet[i].gameObject.SetActive(true);
 			}
 		}
 	}

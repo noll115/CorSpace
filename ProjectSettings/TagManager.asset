@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Planet
   - Asteroid
+  - Obstacle
   layers:
   - Default
   - TransparentFX

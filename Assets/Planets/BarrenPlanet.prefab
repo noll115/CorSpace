@@ -197,6 +197,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   planetSprite: {fileID: 212422231862566190}
+  planetRad: 2.95
   planetInfo: {fileID: 0}
   con: {fileID: 0}
   mask:
@@ -213,6 +214,7 @@ MonoBehaviour:
   rot: 0
   rotSpeed: 2
   initPos: {x: 0, y: 0, z: 0}
+  obsOnPlanet: []
   bResources: {fileID: 114615081066552160}
 --- !u!114 &114615081066552160
 MonoBehaviour:
