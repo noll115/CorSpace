@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Asteroid : Obstacle {
+public class Asteroid : MonoBehaviour {
 
 	static GameObject astroidParent;
 	Rigidbody2D rigid;
@@ -21,15 +21,6 @@ public class Asteroid : Obstacle {
 		transform.SetParent(astroidParent.transform, true);
 	}
 
-	public void SetUp(Planet planetOrb, float CirleRad, float scale) {
-		transform.localScale = new Vector3(scale, scale);
-		circlePos = CirleRad;
-		planetOrbiting = planetOrb;
-		dist = transform.position - planetOrb.transform.position;
-		distMag = dist.magnitude;
-		speed = (Mathf.PI/5)/Random.Range(1,distMag) ;
-		//print(distMag);
-	}
 
 	private void FixedUpdate() {
 		if(!hit) {
@@ -60,5 +51,16 @@ public class Asteroid : Obstacle {
 				Destroy(gameObject);
 			}
 		}
+	}
+
+	public void Setup(Planet planet, Vector3 pos,float circleRad, float scale) {
+		transform.localScale = new Vector3(scale, scale);
+		transform.position = pos;
+		circlePos = circleRad;
+		planetOrbiting = planet;
+		dist = transform.position - planet.transform.position;
+		distMag = dist.magnitude;
+		speed = (Mathf.PI/5)/Random.Range(1,distMag) ;
+		//print(distMag);
 	}
 }

@@ -142,8 +142,8 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 6}
-  m_Size: {x: 6.34, y: 12}
+  m_Offset: {x: 0, y: 3.9901013}
+  m_Size: {x: 6.34, y: 7.9802027}
   m_Direction: 0
 --- !u!114 &114552157182775158
 MonoBehaviour:
@@ -158,9 +158,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   explosionForce: 0
   explosionRadius: 0
-  fireCoolDown: 1
+  fireCoolDown: 0.2
+  burstTimer: 1
+  pelletburst: 3
   timer: 0
-  pelletSpeed: 5
+  pelletSpeed: 3
   pellet: {fileID: 1066467643014052, guid: 545056e6b034f8d40bd03885fa6441dc, type: 2}
   turnPoint: {fileID: 4011527931365724}
   barrelEnd: {fileID: 4872716677010920}
