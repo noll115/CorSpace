@@ -6,15 +6,15 @@ using UnityEngine;
 public class PlayerResources : MonoBehaviour {
 
 	public float playerHealth = 10;
-    [SerializeField]private float maxPlayerHealth = 10;
-    [SerializeField] private float fuel = 100;
+	[SerializeField] private float maxPlayerHealth = 10;
+	[SerializeField] private float fuel = 100;
 	[SerializeField] private float water = 0;
 	[SerializeField] private float lava = 0;
 	[SerializeField] private float ores = 0;
-	 public float maxFuel = 100f;
-	 public float maxLava = 100f;
-	 public float maxWater = 100f;
-	 public float maxOres = 100f;
+	public float maxFuel = 100f;
+	public float maxLava = 100f;
+	public float maxWater = 100f;
+	public float maxOres = 100f;
 	public bool invincible;
 	public bool HasFuel {
 		get {
@@ -25,17 +25,20 @@ public class PlayerResources : MonoBehaviour {
 	public bool HasWater {
 		get {
 			OnResourceChange(this);
-			return Water > 0; }
+			return Water > 0;
+		}
 	}
 	public bool HasLava {
 		get {
 			OnResourceChange(this);
-			return Lava > 0; }
+			return Lava > 0;
+		}
 	}
 	public bool HasOres {
 		get {
 			OnResourceChange(this);
-			return Ores > 0; }
+			return Ores > 0;
+		}
 	}
 	public bool MaxedFuel {
 		get {
@@ -109,12 +112,12 @@ public class PlayerResources : MonoBehaviour {
 
 	public void HealthChange(float hitAmount) {
 		playerHealth += hitAmount;
-        playerHealth = Mathf.Clamp(playerHealth, 0, maxPlayerHealth);
-        var em = ps.emission;
-		em.rateOverTime = (1- (playerHealth/10 )) * 10;
+		playerHealth = Mathf.Clamp(playerHealth, 0, maxPlayerHealth);
+		var em = ps.emission;
+		em.rateOverTime = (1 - (playerHealth / 10)) * 10;
 		healthbar.transform.localScale = new Vector3(playerHealth / 10, 1, 1);
 
-		if(playerHealth <= 0 && !invincible) {
+		if (playerHealth <= 0 && !invincible) {
 			SpriteManager.instance.UseExplosion(transform.position, 9);
 			OnPlayerDeath();
 		}

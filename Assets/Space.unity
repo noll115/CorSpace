@@ -188,6 +188,63 @@ GameObject:
   m_PrefabParentObject: {fileID: 1244844196743302, guid: edc35570889843e429fedf6e58ae0c95,
     type: 2}
   m_PrefabInternal: {fileID: 1440870336}
+--- !u!1 &206692441
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 206692442}
+  - component: {fileID: 206692444}
+  - component: {fileID: 206692443}
+  m_Layer: 13
+  m_Name: Radar
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &206692442
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 206692441}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1531079502}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &206692443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 206692441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dbfbbfba3d44bcf4790127f18d075807, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  planetsNearby: []
+--- !u!58 &206692444
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 206692441}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 20
 --- !u!1001 &266374971
 Prefab:
   m_ObjectHideFlags: 0
@@ -1075,6 +1132,41 @@ Prefab:
       propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
       value: 10.0000
       objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a, type: 2}
   m_IsPrefabParent: 0
@@ -1618,14 +1710,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   planetsB: []
   planetsR: []
-  closestPlanets:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  closestPlanetDist:
-  - Infinity
-  - Infinity
-  - Infinity
+  nearbyPlanets: []
   turnOnDist: 0
   resourceCanvas: {fileID: 1834405596}
   player: {fileID: 0}
