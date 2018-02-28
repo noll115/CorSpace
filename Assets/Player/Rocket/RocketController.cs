@@ -29,8 +29,7 @@ public class RocketController : MonoBehaviour {
 	public PlayerResources pResources;
 	public ParticleSystem thrustParticle;
 	[SerializeField]Vector2Int currentCell;
-	public CanvasBarren bCanvas;
-	public ResourceText rCanvas;
+	public PlanetCanvasController planetCanvas;
 	public delegate void EnterPlanet();
 	public event EnterPlanet OnPlayerChangePlanet;
 	public float rayX;
@@ -147,7 +146,6 @@ public class RocketController : MonoBehaviour {
 		//print(row + "" + col);
 		currentCell.x = row;
 		currentCell.y = col;
-		rCanvas.ChangeCell(SpaceGenerator.cells[currentCell.x, currentCell.y]);
-		bCanvas.ChangeCell(SpaceGenerator.cells[currentCell.x, currentCell.y]);
+		planetCanvas.ChangeCell(SpaceGenerator.cells[currentCell.x, currentCell.y]);
 	}
 }

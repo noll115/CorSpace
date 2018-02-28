@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,7 +12,7 @@ public class CanvasBarren : MonoBehaviour {
 	public Image lifeBar;
 	public RocketController player;
 	public PlanetInfo[] closestPlanets = new PlanetInfo[3];
-	public float[] closestPlanetDist = new float[3];
+	public float[] closestPlanetDist = { Mathf.Infinity, Mathf.Infinity, Mathf.Infinity };
 	public Color lifeBarColor = new Color(0, 0, 0, 1);
 	public GameObject info;
 	public float turnOnDist;
@@ -27,17 +28,16 @@ public class CanvasBarren : MonoBehaviour {
 				float dist = (player.transform.position - planets[i].transform.position).sqrMagnitude;
 				if (dist < closestDist) {
 					closestDist = dist;
-					//closestPlanetDist[0] = dist;
-					//closestPlanets[0] = planets[i].planetInfo;
+					Debug.Log(closestDist);
 					for (int j = 0; j < closestPlanets.Length; j++) {
 						if (dist < closestPlanetDist[j]) {
-							if (closestPlanets[1 + j]) {
+							if (1 + j < closestPlanets.Length) {
 								closestPlanets[1 + j] = closestPlanets[j];
 								closestPlanetDist[1 + j] = closestPlanetDist[j];
 							}
 							closestPlanetDist[j] = dist;
 							closestPlanets[j] = planets[i].planetInfo;
-							return;
+							break;
 						}
 					}
 					/*TODO: Create an array of the top three closests planets

@@ -275,6 +275,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f4451e7d740b65c4da5288c6a58e92f1, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &363652616 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1904653994583304, guid: cbbc7657348beb34f8d27c5ccb6977f3,
+    type: 2}
+  m_PrefabInternal: {fileID: 798810062}
 --- !u!114 &398357503 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114996196201810972, guid: edc35570889843e429fedf6e58ae0c95,
@@ -480,6 +485,18 @@ Transform:
   m_Father: {fileID: 177125937}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &762864228 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114023125127148444, guid: cbbc7657348beb34f8d27c5ccb6977f3,
+    type: 2}
+  m_PrefabInternal: {fileID: 798810062}
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+--- !u!114 &772546218 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114161076909045826, guid: cbbc7657348beb34f8d27c5ccb6977f3,
+    type: 2}
+  m_PrefabInternal: {fileID: 798810062}
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1001 &798810062
 Prefab:
   m_ObjectHideFlags: 0
@@ -586,6 +603,30 @@ Prefab:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114812858390518572, guid: cbbc7657348beb34f8d27c5ccb6977f3,
+        type: 2}
+      propertyPath: closestPlanetDist.Array.data[0]
+      value: Infinity
+      objectReference: {fileID: 0}
+    - target: {fileID: 114812858390518572, guid: cbbc7657348beb34f8d27c5ccb6977f3,
+        type: 2}
+      propertyPath: closestPlanetDist.Array.data[1]
+      value: Infinity
+      objectReference: {fileID: 0}
+    - target: {fileID: 114812858390518572, guid: cbbc7657348beb34f8d27c5ccb6977f3,
+        type: 2}
+      propertyPath: closestPlanetDist.Array.data[2]
+      value: Infinity
+      objectReference: {fileID: 0}
+    - target: {fileID: 114812858390518572, guid: cbbc7657348beb34f8d27c5ccb6977f3,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1904653994583304, guid: cbbc7657348beb34f8d27c5ccb6977f3, type: 2}
+      propertyPath: m_Name
+      value: BarrenInfo
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: cbbc7657348beb34f8d27c5ccb6977f3, type: 2}
   m_IsPrefabParent: 0
@@ -656,6 +697,12 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &921819612 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114508115384494442, guid: ad5731960bc853648b3d823285932e7e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1728111922}
+  m_Script: {fileID: 1453722849, guid: 89f0137620f6af44b9ba852b4190e64e, type: 3}
 --- !u!1 &963775809 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1299526422586302, guid: edc35570889843e429fedf6e58ae0c95,
@@ -666,6 +713,12 @@ GameObject:
   m_PrefabParentObject: {fileID: 1769932110010430, guid: edc35570889843e429fedf6e58ae0c95,
     type: 2}
   m_PrefabInternal: {fileID: 1440870336}
+--- !u!114 &1052725258 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114928897770729970, guid: cbbc7657348beb34f8d27c5ccb6977f3,
+    type: 2}
+  m_PrefabInternal: {fileID: 798810062}
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!20 &1102459655 stripped
 Camera:
   m_PrefabParentObject: {fileID: 20280855628974988, guid: f4451e7d740b65c4da5288c6a58e92f1,
@@ -917,9 +970,120 @@ Prefab:
       propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
       value: 10.0000
       objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 114438993233027788, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: planetCanvas
+      value: 
+      objectReference: {fileID: 1738414802}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
+    - target: {fileID: 198928811179800866, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
+        type: 2}
+      propertyPath: EmissionModule.m_Bursts.Array.data[0].countCurve.minScalar
+      value: 10.0000
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a, type: 2}
   m_IsPrefabParent: 0
+--- !u!114 &1236543881 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114482986790366426, guid: cbbc7657348beb34f8d27c5ccb6977f3,
+    type: 2}
+  m_PrefabInternal: {fileID: 798810062}
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!1 &1356507593
 GameObject:
   m_ObjectHideFlags: 0
@@ -999,7 +1163,7 @@ MonoBehaviour:
   celly: 0
   NumOfCells: 0
   cellSize: 300
-  maxPlanetsSpawned: 3
+  maxPlanetsSpawned: 50
   barrenPlanet: {fileID: 1839387771308646, guid: 9af93d4ddee665e459f310cc76f70226,
     type: 2}
   resourcePlanet: {fileID: 1946577219320788, guid: ba1d495f17ba2d945be9704577c77230,
@@ -1283,6 +1447,12 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &1527991561 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114655995720446598, guid: ad5731960bc853648b3d823285932e7e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1728111922}
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
 --- !u!4 &1531079502 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4263822940267732, guid: 6f2e3ac522c81fd449ce4f4e492d2b1a,
@@ -1394,9 +1564,84 @@ Prefab:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114496359963203448, guid: ad5731960bc853648b3d823285932e7e,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1678493074257632, guid: ad5731960bc853648b3d823285932e7e, type: 2}
+      propertyPath: m_Name
+      value: ResourceInfo
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ad5731960bc853648b3d823285932e7e, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1738414800
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1738414801}
+  - component: {fileID: 1738414802}
+  m_Layer: 0
+  m_Name: CanvasController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1738414801
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1738414800}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1738414802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1738414800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36e7af29da9af1f47987d7d1636b247a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  planetsB: []
+  planetsR: []
+  closestPlanets:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  closestPlanetDist:
+  - Infinity
+  - Infinity
+  - Infinity
+  turnOnDist: 0
+  resourceCanvas: {fileID: 1834405596}
+  player: {fileID: 0}
+  fuelNum: {fileID: 1956617084}
+  waterNum: {fileID: 921819612}
+  lavaNum: {fileID: 2009846110}
+  oresNum: {fileID: 2023905987}
+  lifeBarR: {fileID: 1527991561}
+  finalDist: 0
+  lifeCol: {r: 0, g: 0, b: 0, a: 1}
+  barrenCanvas: {fileID: 363652616}
+  lavaBar: {fileID: 772546218}
+  waterBar: {fileID: 762864228}
+  oresBar: {fileID: 1052725258}
+  lifeBarB: {fileID: 1236543881}
+  lifeBarColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!1001 &1813272062
 Prefab:
   m_ObjectHideFlags: 0
@@ -1521,6 +1766,11 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: d6f732a1832bbb04fbbadc9ac7f04f83, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1834405596 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1678493074257632, guid: ad5731960bc853648b3d823285932e7e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1728111922}
 --- !u!114 &1864549853 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114864588683137756, guid: d6f732a1832bbb04fbbadc9ac7f04f83,
@@ -1538,3 +1788,21 @@ MonoBehaviour:
     type: 2}
   m_PrefabInternal: {fileID: 798810062}
   m_Script: {fileID: 11500000, guid: bf837e799723be8479628aaaa6bd15c1, type: 3}
+--- !u!114 &1956617084 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114456653882751456, guid: ad5731960bc853648b3d823285932e7e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1728111922}
+  m_Script: {fileID: 1453722849, guid: 89f0137620f6af44b9ba852b4190e64e, type: 3}
+--- !u!114 &2009846110 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114817325302568358, guid: ad5731960bc853648b3d823285932e7e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1728111922}
+  m_Script: {fileID: 1453722849, guid: 89f0137620f6af44b9ba852b4190e64e, type: 3}
+--- !u!114 &2023905987 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114621948650355218, guid: ad5731960bc853648b3d823285932e7e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1728111922}
+  m_Script: {fileID: 1453722849, guid: 89f0137620f6af44b9ba852b4190e64e, type: 3}
