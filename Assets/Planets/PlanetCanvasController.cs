@@ -29,8 +29,7 @@ public class PlanetCanvasController : MonoBehaviour {
 	public Image oresBar;
 	public Image lifeBarB;
 	public Color lifeBarColor = new Color(0, 0, 0, 1);
-	WaitForSeconds ws = new WaitForSeconds(0.5f);
-	public PointerObjs pointers;
+	WaitForSeconds ws = new WaitForSeconds(0.2f);
 
 
 	private void Awake() {
@@ -42,9 +41,13 @@ public class PlanetCanvasController : MonoBehaviour {
 	IEnumerator OrderList() {
 		while (true) {
 			nearbyPlanets.OrderBy(x=>Vector2.SqrMagnitude(player.position - x.transform.position));
-			pointers.updatePointers(nearbyPlanets);
 			yield return ws;
 		}
+	}
+
+
+	private void UpdateCanvas(Planet firstClose,Planet sndClose){
+
 	}
 
 
