@@ -4,7 +4,7 @@ using UnityEngine;
 public class SpaceGenerator : MonoBehaviour {
 
 	public SpawnablePlanet[] spawnablePlanets;
-	public static SpaceCell[,] cells = new SpaceCell[3, 3];
+	public static SpaceCell[,] cells;
 	public float planetRadius = 2.95f;
 	public int cellx;
 	public int celly;
@@ -24,11 +24,12 @@ public class SpaceGenerator : MonoBehaviour {
 
 	[ContextMenu("Generate Cell")]
 	public void Generate() {
+		cells = new SpaceCell[NumOfCells, NumOfCells];
 		GameObject Parent = new GameObject("Cells");
 		int row = 0;
-		for (int i = 1; i > -2; i--) {
+		for (int i = NumOfCells/2; i >= -NumOfCells/2; i--) {
 			int col = 0;
-			for (int j = -1; j < 2; j++) {
+			for (int j = -NumOfCells/2; j <= NumOfCells/2; j++) {
 				List<BarrenPlanet> barrenPlanets = new List<BarrenPlanet>();
 				List<ResourcePlanet> resourcePlanets = new List<ResourcePlanet>();
 				SpaceCell Cell = new GameObject("Cell " + row + ":" + col).AddComponent<SpaceCell>();
@@ -115,8 +116,8 @@ public class SpaceGenerator : MonoBehaviour {
 		Vector2 pos = Vector2.zero;
 		while (!goodPos) {
 			pos = cellPos;
-			int xpos = Random.Range(-cellSize / 2 + (cellSize / 8), cellSize / 2 - (cellSize / 8));
-			int ypos = Random.Range(-cellSize / 2 + (cellSize / 8), cellSize / 2 - (cellSize / 8));
+			int xpos = Random.Range(-cellSize / 2 + (cellSize / 10), cellSize / 2 - (cellSize / 10));
+			int ypos = Random.Range(-cellSize / 2 + (cellSize / 10), cellSize / 2 - (cellSize / 10));
 			pos += new Vector2(xpos, ypos);
 			if (!Physics2D.CircleCast(pos, 15, Vector2.zero, 0, planetMask) && !Physics2D.CircleCast(pos, 10, Vector2.zero, 0, playerMask)) {
 				goodPos = true;
@@ -124,6 +125,7 @@ public class SpaceGenerator : MonoBehaviour {
 		}
 		return pos;
 	}
+
 
 	public Sprite RndPlanetSprite(PlanetInfo pi, Planet rp) {
 		int rnd = Random.Range(0, spawnablePlanets.Length);

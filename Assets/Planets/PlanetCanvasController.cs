@@ -29,11 +29,10 @@ public class PlanetCanvasController : MonoBehaviour {
 	public Image oresBar;
 	public Image lifeBarB;
 	public Color lifeBarColor = new Color(0, 0, 0, 1);
-	WaitForSeconds ws = new WaitForSeconds(0.2f);
+	WaitForSeconds ws = new WaitForSeconds(0.5f);
 
 
 	private void Awake() {
-		player = GameObject.FindGameObjectWithTag("Player").transform.parent;
 		nearbyPlanets = player.GetComponentInChildren<PlanetRadar>().planetsNearby;
 		StartCoroutine(OrderList());
 	}
