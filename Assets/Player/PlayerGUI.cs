@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerGUI : MonoBehaviour {
@@ -8,18 +6,24 @@ public class PlayerGUI : MonoBehaviour {
 	public Image fuelBar;
 	public Image lavaBar;
 	public Image waterBar;
-	public Image oreBar;
-	public PlayerResources rockCon;
+	public Image healthbar;
+	PlayerResources playerResources;
+	float maxPlayerHealth;
 	Vector3 fuelAmount = new Vector3(0,1);
 	Vector3 lavaAmount = new Vector3(0,1);
 	Vector3 waterAmount = new Vector3(0,1);
-	Vector3 oreAmount = new Vector3(0,1);
 
 
 	private void Awake() {
-		rockCon = FindObjectOfType<PlayerResources>();
-		rockCon.UpdateFuel += UpdateFuelGUI;
-		rockCon.OnResourceChange += UpdateResourceBars;
+		playerResources = FindObjectOfType<RocketController>().pResources;
+		playerResources.UpdateFuel += UpdateFuelGUI;
+		playerResources.OnResourceChange += UpdateResourceBars;
+		playerResources.OnHealthChange += UpdateHealthBar;
+		maxPlayerHealth = playerResources.maxPlayerHealth;
+	}
+
+	void UpdateHealthBar(float playerHealth){
+		healthbar.transform.localScale = new Vector3(playerHealth / maxPlayerHealth, 1, 1);
 	}
 
 
@@ -32,10 +36,8 @@ public class PlayerGUI : MonoBehaviour {
 	public void UpdateResourceBars(PlayerResources p) {
 		lavaAmount.x = p.Lava / p.maxLava;
 		waterAmount.x = p.Water / p.maxWater;
-		oreAmount.x = p.Ores / p.maxOres;
 		lavaBar.rectTransform.localScale = lavaAmount;
 		waterBar.rectTransform.localScale = waterAmount;
-		oreBar.rectTransform.localScale = oreAmount;
 	}
 
 }

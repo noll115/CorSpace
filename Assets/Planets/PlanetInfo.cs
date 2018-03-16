@@ -29,7 +29,7 @@ public class PlanetInfo : ScriptableObject {
 	public void UpdateData(BarrenResources resource) {
 		lavaAmount = resource.lava;
 		waterAmount = resource.water;
-		oresAmount = resource.ores;
+		//oresAmount = resource.ores;
 		lifeAmount = resource.life;
 	}
 

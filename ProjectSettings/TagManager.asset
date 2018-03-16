@@ -8,6 +8,8 @@ TagManager:
   - Asteroid
   - Obstacle
   - Radar
+  - Dead
+  - Pellet
   layers:
   - Default
   - TransparentFX
@@ -47,6 +49,15 @@ TagManager:
     locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: PlanetBackGround
+    uniqueID: 3959614213
+    locked: 0
+  - name: PlanetObstacles
+    uniqueID: 3948294261
+    locked: 0
+  - name: PlanetSprite
+    uniqueID: 98763219
     locked: 0
   - name: Front
     uniqueID: 2935346911

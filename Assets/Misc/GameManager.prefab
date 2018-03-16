@@ -1,0 +1,122 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1343074243581858}
+  m_IsPrefabParent: 1
+--- !u!1 &1343074243581858
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4277183242800094}
+  - component: {fileID: 114032403274493020}
+  - component: {fileID: 114729060709799032}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4277183242800094
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1343074243581858}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114032403274493020
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1343074243581858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d314b4184e8404f4fb9d1cdbd728cc85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  spaceGenerator:
+    spawnablePlanets:
+    - {fileID: 11400000, guid: eb679593d0ba66746aa123d812456ef1, type: 2}
+    - {fileID: 11400000, guid: 3802392d16dc1ef4d8556ac35e080212, type: 2}
+    - {fileID: 11400000, guid: 36c8cd46da0535b4e8f9876a7e4b0a9c, type: 2}
+    - {fileID: 11400000, guid: 915ba9e8b55110c4cb4e6c51ad1dc0a9, type: 2}
+    - {fileID: 11400000, guid: e36474b8ad5a8cd40b35c56aa9a22810, type: 2}
+    - {fileID: 11400000, guid: c63fab4aef6ff6d4280c95d56427b9bd, type: 2}
+    - {fileID: 11400000, guid: db21c45d9189c3c4890e7a18c479d7d5, type: 2}
+    - {fileID: 11400000, guid: 9cd00fef692db424ebee390234b942c9, type: 2}
+    - {fileID: 11400000, guid: 9a1e7f0107ba8ee46ae112f0275ad0ab, type: 2}
+    NumOfCells: 3
+    cellSize: 200
+    maxPlanetsSpawned: 40
+    barrenPlanet: {fileID: 1839387771308646, guid: 9af93d4ddee665e459f310cc76f70226,
+      type: 2}
+    resourcePlanet: {fileID: 1946577219320788, guid: ba1d495f17ba2d945be9704577c77230,
+      type: 2}
+    blackHole: {fileID: 1916484936639960, guid: c5749d18a7bbcdb438fd47ce7ebd2cd7,
+      type: 2}
+    sun: {fileID: 1378080287063862, guid: 3a5f68f40c81d254f8bd515ce768859c, type: 2}
+    planetMask:
+      serializedVersion: 2
+      m_Bits: 512
+    playerMask:
+      serializedVersion: 2
+      m_Bits: 256
+    Obstacles:
+    - {fileID: 1065461916699552, guid: 208250c03d6a7d34e88243013faaa6fd, type: 2}
+    - {fileID: 1756813873015164, guid: e97b4ef47ad35834995b6965d9693b36, type: 2}
+  generateOnStart: 1
+  score: 0
+  NumOfPlanetsRevived: 0
+  NumOfPlanetsDead: 0
+  scoreNum: {fileID: 0}
+  retryButton: {fileID: 0}
+  quitButton: {fileID: 0}
+  scoreGUI: {fileID: 0}
+  gOs:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  transition: {fileID: 0}
+--- !u!114 &114729060709799032
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1343074243581858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9401fbd964e2dfb4681c2acc953f941a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uploadButton: {fileID: 0}
+  input: {fileID: 0}
+  canvas: {fileID: 0}
+  textEntries:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  refreshingTxt: {fileID: 0}
+  statisticName: CorSpace Scoreboard

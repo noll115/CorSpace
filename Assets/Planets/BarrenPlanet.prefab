@@ -169,7 +169,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 6
+  m_Radius: 7
 --- !u!58 &58780112521433436
 CircleCollider2D:
   m_ObjectHideFlags: 1
@@ -199,13 +199,11 @@ MonoBehaviour:
   planetSprite: {fileID: 212422231862566190}
   planetRad: 2.95
   planetInfo: {fileID: 0}
-  con: {fileID: 0}
   mask:
     serializedVersion: 2
     m_Bits: 512
   playerOnPlanet: 0
   playerAction: 0
-  pEffector: {fileID: 0}
   rigid: {fileID: 0}
   trig: {fileID: 0}
   Asteroid: {fileID: 1276998136537578, guid: 831176bc9d91e0b4686bfba505c4143a, type: 2}
@@ -213,7 +211,6 @@ MonoBehaviour:
   numOfAsteroids: 0
   rot: 0
   rotSpeed: 2
-  initPos: {x: 0, y: 0, z: 0}
   obsOnPlanet: []
   bResources: {fileID: 114615081066552160}
 --- !u!114 &114615081066552160
@@ -231,10 +228,8 @@ MonoBehaviour:
   pointsGained: 3
   lava: 0
   water: 0
-  ores: 0
   maxLava: 150
   maxWater: 150
-  maxOres: 150
   mat: {fileID: 0}
   life: 0
 --- !u!212 &212422231862566190
@@ -268,10 +263,10 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 98763219
+  m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: c872afff938cf4349b3a006e4eefe2dc, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2abfbc965e5cc6c4c9407f7b71528853, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -312,8 +307,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -583543255
-  m_SortingLayer: -1
+  m_SortingLayerID: -335353083
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 2e7036d1636e0a246a25b4363279ebff, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -380,11 +375,11 @@ PointEffector2D:
   m_ColliderMask:
     serializedVersion: 2
     m_Bits: 2304
-  m_ForceMagnitude: -30
+  m_ForceMagnitude: -15
   m_ForceVariation: 0
   m_DistanceScale: 0.5
   m_ForceSource: 0
   m_ForceTarget: 0
-  m_ForceMode: 1
+  m_ForceMode: 0
   m_Drag: 0.2
   m_AngularDrag: 0

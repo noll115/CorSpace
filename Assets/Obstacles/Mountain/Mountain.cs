@@ -1,21 +1,27 @@
 using UnityEngine;
 
-public class Mountain : MonoBehaviour, Obstacle {
+public class Mountain : MonoBehaviour, IObstacle {
 
-	
+	Planet planetOn;
+	public Planet ParentPlanet {
+		get {
+			return planetOn;
+		}
+	}
 
 	public void OnCollisionEnter2D(Collision2D collision) {
 		if(collision.contacts.Length > 0) {
 			if(collision.collider.CompareTag("Player") ) {
-				collision.collider.GetComponentInParent<PlayerResources>().HealthChange(-1f);
+				collision.collider.GetComponentInParent<RocketController>().pResources.HealthChange(-10f);
 				AddExplosionForce(collision.rigidbody, 10, collision.contacts[0].point, 4);
-				SpriteManager.instance.UseExplosion(collision.contacts[0].point, 3);
+				SpriteManager.instance.UseExplosion(collision.contacts[0].point,5);
 			}
 		}
 	}
 
-	public void Setup(SpawnablePlanet planet,Vector3 pos, Vector3 upVec,Vector3 scale) {
-		GetComponent<SpriteRenderer>().color = planet.baseColor;
+	public void Setup(Planet planet,Vector3 pos, Vector3 upVec,Vector3 scale) {
+		planetOn = planet;
+		GetComponent<SpriteRenderer>().color = planet.planetInfo.spriteInfo.baseColor;
         transform.position = pos;
 		transform.up = upVec;
 		transform.localScale = scale;

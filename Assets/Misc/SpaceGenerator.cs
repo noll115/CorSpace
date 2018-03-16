@@ -1,14 +1,13 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class SpaceGenerator : MonoBehaviour {
+[System.Serializable]
+public class SpaceGenerator {
 
 	public SpawnablePlanet[] spawnablePlanets;
 	public static SpaceCell[,] cells;
-	public float planetRadius = 2.95f;
-	public int cellx;
-	public int celly;
-	public int NumOfCells;
+	public const float planetRadius = 2.95f;
+	[Tooltip("Only Odd Numbers")] public int NumOfCells;
 	public int cellSize = 200;
 	public int maxPlanetsSpawned;
 	public GameObject barrenPlanet;
@@ -18,20 +17,18 @@ public class SpaceGenerator : MonoBehaviour {
 	public LayerMask planetMask;
 	public LayerMask playerMask;
 	public GameObject[] Obstacles;
-	public GameObject obstacleParent;
-	GameObject[] obsParents;
+	private GameObject obstacleParent;
+	private GameObject[] obsParents;
 
 
-	[ContextMenu("Generate Cell")]
 	public void Generate() {
 		cells = new SpaceCell[NumOfCells, NumOfCells];
 		GameObject Parent = new GameObject("Cells");
 		int row = 0;
-		for (int i = NumOfCells/2; i >= -NumOfCells/2; i--) {
+		for (int i = NumOfCells / 2; i >= -NumOfCells / 2; i--) {
 			int col = 0;
-			for (int j = -NumOfCells/2; j <= NumOfCells/2; j++) {
-				List<BarrenPlanet> barrenPlanets = new List<BarrenPlanet>();
-				List<ResourcePlanet> resourcePlanets = new List<ResourcePlanet>();
+			for (int j = -NumOfCells / 2; j <= NumOfCells / 2; j++) {
+				List<Planet> planets = new List<Planet>();
 				SpaceCell Cell = new GameObject("Cell " + row + ":" + col).AddComponent<SpaceCell>();
 				Cell.transform.SetParent(Parent.transform, true);
 				Vector3 cellPos = new Vector3(cellSize * j, cellSize * i);
@@ -39,43 +36,79 @@ public class SpaceGenerator : MonoBehaviour {
 				BoxCollider2D box = Cell.gameObject.AddComponent<BoxCollider2D>();
 				box.isTrigger = true;
 				box.size = new Vector2(cellSize, cellSize);
-				CreatePlanets(barrenPlanets, resourcePlanets, cellPos);
-				Cell.Setup(row, col, box, barrenPlanets, resourcePlanets, cellPos);
+				GenerateBigPlanets(planets, cellPos);
+				CreatePlanets(planets, cellPos);
+				Cell.Setup(row, col, box, planets, cellPos);
 				col++;
 			}
 			row++;
 		}
-		//for(int i = 0;i < cells.GetLength(0);i++) {
-		//	for(int j = 0;j < cells.GetLength(1);j++) {
-		//		print(cells[i,j].name);
-		//	}
-		//}
+	}
+
+	private void GenerateBigPlanets(List<Planet> planets, Vector2 cellPos) {
+		float numOfLargePlanets = Mathf.Round((float)cellSize / 100);
+		int rndPlnt;
+		Planet p;
+		PlanetInfo pi;
+		for (int i = 0; i < numOfLargePlanets; i++) {
+			rndPlnt = Random.Range(0, 2);
+			pi = ScriptableObject.CreateInstance<PlanetInfo>();
+			float size = Random.Range(1f, 1.5f);
+			pi.size = new Vector3(size, size, 1);
+			pi.planetType = GeneratePlanetType();
+			pi.startRot = Random.Range(0, 360f);
+			if (rndPlnt == 0) {
+				//spawn Sun
+				pi.planetType = Planets.SUN;
+				p = GameObject.Instantiate(sun).GetComponent<Planet>();
+				planets.Add(p);
+				pi.position = PosInSquare(cellPos, p.trig.bounds.extents.x);
+				planets[planets.Count - 1].SetUpPlanet(pi);
+			}
+			else {
+				//spawnBlackHole
+				pi.planetType = Planets.BLACKHOLE;
+				p = GameObject.Instantiate(blackHole).GetComponent<Planet>();
+				planets.Add(p);
+				pi.position = PosInSquare(cellPos, p.trig.bounds.extents.x);
+				planets[planets.Count - 1].SetUpPlanet(pi);
+			}
+		}
 	}
 
 
 
-	public void CreatePlanets(List<BarrenPlanet> bPlanets, List<ResourcePlanet> rPlanets, Vector2 cellPos) {
+	public void CreatePlanets(List<Planet> planets, Vector2 cellPos) {
 		PlanetInfo pi;
-		ResourcePlanet rp;
-		BarrenPlanet bp;
+		Planet p;
 		for (int i = 0; i < maxPlanetsSpawned; i++) {
 			pi = GeneratePlanetInfo(cellPos);
 			switch (pi.planetType) {
 				case Planets.RESOURCE:
-					rp = GameObject.Instantiate(resourcePlanet).GetComponent<ResourcePlanet>();
-					rPlanets.Add(rp);
-					rPlanets[rPlanets.Count - 1].SetUpPlanet(pi);
-					rp.planetSprite.sprite = RndPlanetSprite(pi, rp);
+					p = GameObject.Instantiate(resourcePlanet).GetComponent<ResourcePlanet>();
+					planets.Add(p);
+					pi.position = PosInSquare(cellPos, p.trig.bounds.extents.x);
+					planets[planets.Count - 1].SetUpPlanet(pi);
+					p.planetSprite.sprite = RndPlanetSprite(pi, p);
 					break;
 				case Planets.BARREN:
-					bp = GameObject.Instantiate(barrenPlanet).GetComponent<BarrenPlanet>();
-					bPlanets.Add(bp);
-					bPlanets[bPlanets.Count - 1].SetUpPlanet(pi);
-					bp.planetSprite.sprite = RndPlanetSprite(pi, bp);
+					p = GameObject.Instantiate(barrenPlanet).GetComponent<BarrenPlanet>();
+					planets.Add(p);
+					pi.position = PosInSquare(cellPos, p.trig.bounds.extents.x);
+					planets[planets.Count - 1].SetUpPlanet(pi);
+					p.planetSprite.sprite = RndPlanetSprite(pi, p);
 					break;
 				case Planets.BLACKHOLE:
+					p = GameObject.Instantiate(blackHole).GetComponent<Planet>();
+					planets.Add(p);
+					pi.position = PosInSquare(cellPos, p.trig.bounds.extents.x);
+					planets[planets.Count - 1].SetUpPlanet(pi);
 					break;
 				case Planets.SUN:
+					p = GameObject.Instantiate(sun).GetComponent<Planet>();
+					planets.Add(p);
+					pi.position = PosInSquare(cellPos, p.trig.bounds.extents.x);
+					planets[planets.Count - 1].SetUpPlanet(pi);
 					break;
 				default:
 					break;
@@ -83,35 +116,41 @@ public class SpaceGenerator : MonoBehaviour {
 		}
 
 	}
-	[ContextMenu("Generate Planet")]
+
+
 	public PlanetInfo GeneratePlanetInfo(Vector2 cell) {
 		PlanetInfo pi = ScriptableObject.CreateInstance<PlanetInfo>();
 		float size = Random.Range(1f, 1.5f);
 		pi.size = new Vector3(size, size, 1);
 		pi.planetType = GeneratePlanetType();
 		pi.startRot = Random.Range(0, 360f);
-		if (pi.planetType == Planets.RESOURCE) {
-			pi.lavaAmount = Random.Range(100, 151);
-			pi.maxLava = pi.lavaAmount;
-			pi.waterAmount = Random.Range(100, 151);
-			pi.maxWater = pi.waterAmount;
-			pi.oresAmount = Random.Range(100, 151);
-			pi.maxOres = pi.oresAmount;
-			pi.fuelAmount = Random.Range(60, 100);
-			pi.maxFuel = pi.fuelAmount;
+		switch (pi.planetType) {
+			case Planets.RESOURCE:
+				pi.lavaAmount = Random.Range(100, 151);
+				pi.maxLava = pi.lavaAmount;
+				pi.waterAmount = Random.Range(100, 151);
+				pi.maxWater = pi.waterAmount;
+				pi.oresAmount = Random.Range(50, 70);
+				pi.maxOres = pi.oresAmount;
+				pi.fuelAmount = Random.Range(60, 100);
+				pi.maxFuel = pi.fuelAmount;
+				pi.numOfAsteroids = Random.Range(1, 5);
+				break;
+			case Planets.BARREN:
+				pi.maxLava = 50;
+				pi.maxWater = 50;
+				pi.numOfAsteroids = Random.Range(0, 5);
+				break;
+			case Planets.BLACKHOLE:
+			case Planets.SUN:
+				break;
 		}
-		else {
-			pi.maxOres = 50;
-			pi.maxLava = 50;
-			pi.maxWater = 50;
-		}
-		pi.numOfAsteroids = Random.Range(0, 5);
+
 		pi.rotSpeed = Random.Range(2f, 5f);
-		pi.position = PosInSquare(cell, pi.size);
 		return pi;
 	}
 
-	Vector2 PosInSquare(Vector2 cellPos, Vector3 planetSize) {
+	Vector2 PosInSquare(Vector2 cellPos, float trigRadius) {
 		bool goodPos = false;
 		Vector2 pos = Vector2.zero;
 		while (!goodPos) {
@@ -119,7 +158,7 @@ public class SpaceGenerator : MonoBehaviour {
 			int xpos = Random.Range(-cellSize / 2 + (cellSize / 10), cellSize / 2 - (cellSize / 10));
 			int ypos = Random.Range(-cellSize / 2 + (cellSize / 10), cellSize / 2 - (cellSize / 10));
 			pos += new Vector2(xpos, ypos);
-			if (!Physics2D.CircleCast(pos, 15, Vector2.zero, 0, planetMask) && !Physics2D.CircleCast(pos, 10, Vector2.zero, 0, playerMask)) {
+			if (!Physics2D.CircleCast(pos, trigRadius * 2, Vector2.zero, 0, planetMask) && !Physics2D.CircleCast(pos, trigRadius * 2, Vector2.zero, 0, playerMask)) {
 				goodPos = true;
 			}
 		}
@@ -136,7 +175,8 @@ public class SpaceGenerator : MonoBehaviour {
 		return spawnable.Planet;
 
 	}
-	[ContextMenu("Generate PlanetWObs")]
+
+
 	public void GenerateObstacles(PlanetInfo pi, Planet planet, SpawnablePlanet spawnablePlanet) {
 		CreateObstacleParentObjs();
 		float localplanetRad = planetRadius * planet.transform.localScale.x;
@@ -163,7 +203,7 @@ public class SpaceGenerator : MonoBehaviour {
 					Transform obstacleObj = GameObject.Instantiate(Obstacles[rndObstacle]).transform;
 					planet.obsOnPlanet.Add(obstacleObj);
 					hit = Physics2D.Raycast(anglePos - dir, dir, anglePos.sqrMagnitude, planetMask);
-					obstacleObj.GetComponent<Obstacle>().Setup(spawnablePlanet,anglePos,hit.normal,planet.transform.localScale);
+					obstacleObj.GetComponent<IObstacle>().Setup(planet, anglePos, hit.normal, planet.transform.localScale);
 					obstacleObj.transform.SetParent(obsParents[rndObstacle].transform, true);
 					anglesUsed[numOfObsSpawned] = rndAngle;
 				}
@@ -175,8 +215,8 @@ public class SpaceGenerator : MonoBehaviour {
 					planet.obsOnPlanet.Add(obstacleObj2);
 					float extentsX = obstacleObj1.GetComponent<SpriteRenderer>().bounds.extents.x;
 					hit = Physics2D.Raycast(anglePos - dir, dir, anglePos.sqrMagnitude, planetMask);
-					obstacleObj1.GetComponent<Obstacle>().Setup(spawnablePlanet,anglePos,hit.normal,planet.transform.localScale);
-					obstacleObj2.GetComponent<Obstacle>().Setup(spawnablePlanet,anglePos,hit.normal,planet.transform.localScale);
+					obstacleObj1.GetComponent<IObstacle>().Setup(planet, anglePos, hit.normal, planet.transform.localScale);
+					obstacleObj2.GetComponent<IObstacle>().Setup(planet, anglePos, hit.normal, planet.transform.localScale);
 					obstacleObj1.transform.position += obstacleObj1.transform.right * extentsX * 2f;
 					Vector2 dir1 = (planet.transform.position - obstacleObj1.transform.position);
 					hit = Physics2D.Raycast(obstacleObj1.transform.position, dir1.normalized, anglePos.sqrMagnitude, planetMask);
@@ -205,20 +245,12 @@ public class SpaceGenerator : MonoBehaviour {
 	public Planets GeneratePlanetType() {
 		float rndPlnt = Random.value;
 		Planets planetType;
-		if (rndPlnt > 0.6f) {
+		if (rndPlnt >= 0.6f) {
 			planetType = Planets.BARREN;
 		}
 		else {
 			planetType = Planets.RESOURCE;
 		}
-		//else if(rndPlnt >= 0.15f) {
-		//	planetType = Planets.BLACKHOLE;
-		//	//spawn blackhole
-		//}
-		//else {
-		//	planetType = Planets.SUN;
-		//	//spawn sun
-		//}
 		return planetType;
 	}
 

@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public class Pooler<T> where T : MonoBehaviour  {
+public class Pooler<T> where T : Component  {
 
 	private Queue<T> queue;
 

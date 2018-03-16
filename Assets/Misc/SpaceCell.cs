@@ -5,34 +5,27 @@ using UnityEngine;
 public class SpaceCell : MonoBehaviour {
 
 	public BoxCollider2D box2d;
-	public List<BarrenPlanet> barrenPlanets;
-	public List<ResourcePlanet> resourcePlanets;
+	public List<Planet> planets;
 	public int cellRow,cellCol;
 
-	public void Setup(int row,int col,BoxCollider2D bx, List<BarrenPlanet> bplanets, List<ResourcePlanet> rPlanets, Vector3 cellPos) {
+	public void Setup(int row,int col,BoxCollider2D bx,List<Planet> planets, Vector3 cellPos) {
 		this.cellRow = row;
 		this.cellCol = col;
 		box2d = bx;
-		barrenPlanets = bplanets;
-		resourcePlanets = rPlanets;
+		this.planets = planets;
 		transform.position = cellPos;
 		ActivatePlanets(false);
 	}
 
 
-	void ActivatePlanets(bool activate) {
-		for(int i = 0;i < barrenPlanets.Count;i++) {
-			if(barrenPlanets[i])
-				barrenPlanets[i].gameObject.SetActive(activate);
-		}
-		for(int i = 0;i < resourcePlanets.Count;i++) {
-			if(resourcePlanets[i])
-				resourcePlanets[i].gameObject.SetActive(activate);
+	void ActivatePlanets(bool active) {
+		for (int i = 0; i < planets.Count; i++){
+			planets[i].gameObject.SetActive(active);
 		}
 	}
 
 	private void OnTriggerExit2D(Collider2D collision) {
-		if(collision.CompareTag("Player")) {
+		if(collision.CompareTag("Player") && !collision.GetComponentInParent<RocketController>().pResources.dead) {
 			ActivatePlanets(false);
 		}
 	}

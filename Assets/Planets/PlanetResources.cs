@@ -30,7 +30,7 @@ public class PlanetResources : MonoBehaviour {
 
 	public float life = 1f;
 	Material mat;
-	private const string Name = "_Lerp";
+	private const string Name = "_CutOff";
 	bool lostPoints = false;
 
 	private void Awake() {
@@ -55,69 +55,97 @@ public class PlanetResources : MonoBehaviour {
 
 
 	public void SubtractResources(PlayerResources presources) {
-		if(!presources.MaxedFuel || !presources.MaxedOres || !presources.MaxedWater || !presources.MaxedLava) {
-            float collected = collectionSpeed * Time.deltaTime;
-            SubtractFuel(presources,collected);
-			SubtractLava(presources,collected);
-			SubtractWater(presources,collected);
-			SubtractOres(presources,collected);
-			life = (fuel + lava + water + ores) / (maxFuel + maxLava + maxWater + maxOres);
-			mat.SetFloat(Name, life);
-            presources.HealthChange(0.3f * Time.deltaTime);
-            if(life < 0.5f) {
-				GameManager.Gm.AddScore(-pointLost);
-			}
-			else {
-				GameManager.Gm.AddScore(pointsGained);
-			}
-			if(life <= 0 && !lostPoints) {
-				GameManager.Gm.AddScore(-(pointLost * 100));
-				lostPoints = true;
-			}
+		if ((!presources.MaxedFuel || !presources.MaxedHealth || !presources.MaxedWater || !presources.MaxedLava) && (HasFuel || HasWater || HasLava || HasOres)) {
+			presources.PlayTaking();
+			float collected = collectionSpeed * Time.deltaTime;
+			SubtractFuel(presources, collected);
+			SubtractLava(presources, collected);
+			SubtractWater(presources, collected);
+			SubtractOres(presources, collected);
+			CalculateLife();
+		}
+		else {
+			presources.StopTaking();
 		}
 	}
 
-	private void SubtractOres(PlayerResources presources,float collected) {
-		if(HasOres && !presources.MaxedOres) {
+	private void CalculateLife() {
+		life = (fuel + lava + water + ores) / (maxFuel + maxLava + maxWater + maxOres);
+		mat.SetFloat(Name, life * 2);
+		if (life < 0.5f) {
+			GameManager.Gm.AddScore(-pointLost);
+		}
+		else {
+			GameManager.Gm.AddScore(pointsGained);
+		}
+		if (life <= 0 && !lostPoints) {
+			GameManager.Gm.AddScore(-(pointLost * 100));
+			GameManager.Gm.NumOfPlanetsDead++;
+			lostPoints = true;
+		}
+	}
+
+	private void SubtractOres(PlayerResources presources, float collected) {
+		if (HasOres && !presources.MaxedHealth) {
 			ores -= collected;
-			presources.Ores += collected;
-			if(ores < 0.5f || presources.MaxedOres) {
+			presources.Health += collected;
+			if (ores < 0.5f || presources.MaxedHealth) {
 				ores = Mathf.Floor(ores);
-				presources.Ores = Mathf.Ceil(presources.Ores);
+				presources.Health = Mathf.Ceil(presources.Health);
 			}
 		}
 	}
 
-	private void SubtractWater(PlayerResources presources,float collected) {
-		if(HasWater&& !presources.MaxedWater) {
+	private void SubtractWater(PlayerResources presources, float collected) {
+		if (HasWater && !presources.MaxedWater) {
 			water -= collected;
 			presources.Water += collected;
-			if(water < 0.5f || presources.MaxedWater) {
+			if (water < 0.5f || presources.MaxedWater) {
 				water = Mathf.Floor(water);
 				presources.Water = Mathf.Ceil(presources.Water);
 			}
 		}
 	}
 
-	private void SubtractLava(PlayerResources presources,float collected) {
-		if(HasLava && !presources.MaxedLava) {
+	private void SubtractLava(PlayerResources presources, float collected) {
+		if (HasLava && !presources.MaxedLava) {
 			lava -= collected;
 			presources.Lava += collected;
-			if(lava < 0.5f || presources.MaxedLava) {
+			if (lava < 0.5f || presources.MaxedLava) {
 				lava = Mathf.Floor(lava);
 				presources.Lava = Mathf.Ceil(presources.Lava);
 			}
 		}
 	}
 
-	private void SubtractFuel(PlayerResources presources,float collected) {
-		if(HasFuel && !presources.MaxedFuel) {
+	private void SubtractFuel(PlayerResources presources, float collected) {
+		if (HasFuel && !presources.MaxedFuel) {
 			fuel -= collected;
 			presources.Fuel += collected;
-			if(fuel < 0.5f || presources.MaxedFuel) {
+			if (fuel < 0.5f || presources.MaxedFuel) {
 				fuel = Mathf.Floor(fuel);
 				presources.Fuel = Mathf.Ceil(presources.Fuel);
 			}
 		}
+	}
+
+	public void AstroidHit() {
+		lava -= lava / 3;
+		water -= water / 3;
+		fuel -= fuel / 3;
+		ores -= ores / 3;
+		lava = Mathf.Clamp(lava, 0, maxLava);
+		water = Mathf.Clamp(water, 0, maxWater);
+		fuel = Mathf.Clamp(fuel, 0, maxFuel);
+		ores = Mathf.Clamp(ores, 0, maxOres);
+		StartCoroutine(PlanetHit());
+		CalculateLife();
+	}
+
+
+	IEnumerator PlanetHit() {
+		mat.SetFloat("_Flash", 1);
+		yield return new WaitForSeconds(0.1f);
+		mat.SetFloat("_Flash", 0);
 	}
 }

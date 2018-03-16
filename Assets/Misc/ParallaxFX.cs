@@ -1,20 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+[SelectionBase]
 public class ParallaxFX : MonoBehaviour {
 
 	public float Damp;
-	public RocketController con;
-	public Material mat;
-	public string txt = "_MainTex";
+	public Transform obj;
+	Material mat;
+	string txt = "_MainTex";
 
 	private void Awake() {
 		mat = GetComponent<Renderer>().material;
 	}
 
 	private void LateUpdate() {
-		mat.SetTextureOffset(txt,-con.transform.position / Damp );
+		mat.SetTextureOffset(txt,-obj.transform.position / Damp );
 	}
 
 }

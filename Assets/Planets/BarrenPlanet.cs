@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class BarrenPlanet : Planet {
 
@@ -19,9 +17,11 @@ public class BarrenPlanet : Planet {
 		planetInfo.UpdateData(bResources);
 	}
 
-	private void OnBecameVisible() {
-		
-	}
+
+	public override void AstroidHit(){
+		bResources.AstroidHit();
+		planetInfo.UpdateData(bResources);
+	} 
 
 
 }

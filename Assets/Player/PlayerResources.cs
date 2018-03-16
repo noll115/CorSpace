@@ -1,21 +1,21 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine.UI;
+﻿using UnityEngine.UI;
 using UnityEngine;
+using System;
+[Serializable]
+public class PlayerResources {
 
-public class PlayerResources : MonoBehaviour {
-
-	public float playerHealth = 10;
-	[SerializeField] private float maxPlayerHealth = 10;
+	public float playersCurrentHealth = 10;
+	public float maxPlayerHealth = 10;
 	[SerializeField] private float fuel = 100;
 	[SerializeField] private float water = 0;
 	[SerializeField] private float lava = 0;
-	[SerializeField] private float ores = 0;
 	public float maxFuel = 100f;
 	public float maxLava = 100f;
 	public float maxWater = 100f;
-	public float maxOres = 100f;
 	public bool invincible;
+	public bool dead;
+	public ParticleSystem givingParticle;
+	public ParticleSystem takingParticle;
 	public bool HasFuel {
 		get {
 			UpdateFuel(fuel);
@@ -34,12 +34,6 @@ public class PlayerResources : MonoBehaviour {
 			return Lava > 0;
 		}
 	}
-	public bool HasOres {
-		get {
-			OnResourceChange(this);
-			return Ores > 0;
-		}
-	}
 	public bool MaxedFuel {
 		get {
 			return fuel >= maxFuel;
@@ -51,9 +45,9 @@ public class PlayerResources : MonoBehaviour {
 	public bool MaxedLava {
 		get { return Lava >= maxLava; }
 	}
-	public bool MaxedOres {
+	public bool MaxedHealth {
 		get {
-			return Ores >= maxOres;
+			return playersCurrentHealth >= maxPlayerHealth;
 		}
 	}
 	public float Fuel {
@@ -86,39 +80,42 @@ public class PlayerResources : MonoBehaviour {
 			OnResourceChange(this);
 		}
 	}
-	public float Ores {
+	public float Health {
 		get {
-			return ores;
+			return playersCurrentHealth;
 		}
 
 		set {
-			ores = value;
-			ores = Mathf.Clamp(ores, 0, maxOres);
+			playersCurrentHealth = value;
+			playersCurrentHealth = Mathf.Clamp(playersCurrentHealth, 0, maxPlayerHealth);
+			HealthChange(0);
 			OnResourceChange(this);
 		}
 	}
+
 	public ParticleSystem ps;
-	public Image healthbar;
 
 	public delegate void UseFuel(float fuel);
 	public event UseFuel UpdateFuel;
 
-	public delegate void PlayerDied();
-	public event PlayerDied OnPlayerDeath;
+	public Action OnPlayerDeath;
+	public Action<PlayerResources> OnResourceChange;
+	public Action<float> OnHealthChange;
+	ParticleSystem.EmissionModule em;
 
-	public delegate void ChangeResources(PlayerResources r);
-	public event ChangeResources OnResourceChange;
-
+	public void Setup(){
+		em = ps.emission;
+		playersCurrentHealth = maxPlayerHealth;
+	}
 
 	public void HealthChange(float hitAmount) {
-		playerHealth += hitAmount;
-		playerHealth = Mathf.Clamp(playerHealth, 0, maxPlayerHealth);
-		var em = ps.emission;
-		em.rateOverTime = (1 - (playerHealth / 10)) * 10;
-		healthbar.transform.localScale = new Vector3(playerHealth / 10, 1, 1);
+		playersCurrentHealth += hitAmount;
+		playersCurrentHealth = Mathf.Clamp(playersCurrentHealth, 0, maxPlayerHealth);
+		em.rateOverTime = (1 - (playersCurrentHealth / 10)) * 10;
+		OnHealthChange(playersCurrentHealth);
 
-		if (playerHealth <= 0 && !invincible) {
-			SpriteManager.instance.UseExplosion(transform.position, 9);
+		if (playersCurrentHealth <= 0 && !invincible) {
+			dead = true;
 			OnPlayerDeath();
 		}
 	}
@@ -126,6 +123,30 @@ public class PlayerResources : MonoBehaviour {
 	public void SubFuel(float amount) {
 		fuel -= amount;
 		fuel = Mathf.Clamp(fuel, 0, 100);
+	}
+
+	public void PlayTaking() {
+		if (!takingParticle.isPlaying) {
+			takingParticle.Play();
+		}
+	}
+
+	public void PlayGiving() {
+		if (!givingParticle.isPlaying) {
+			givingParticle.Play();
+		}
+	}
+
+	public void StopTaking() {
+		if (takingParticle.isPlaying) {
+			takingParticle.Stop();
+		}
+	}
+
+	public void StopGiving() {
+		if (givingParticle.isPlaying) {
+			givingParticle.Stop();
+		}
 	}
 
 

@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System;
 
 public class PlanetRadar : MonoBehaviour {
 
@@ -18,6 +17,11 @@ public class PlanetRadar : MonoBehaviour {
 		if (other.CompareTag("Planet")) {
 			planetsNearby.Remove(other.GetComponentInParent<Planet>());
 		}
+	}
+
+
+	public void NewCell(){
+		planetsNearby.Clear();
 	}
 
 

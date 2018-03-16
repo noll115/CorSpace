@@ -7,13 +7,13 @@ public class BarrenResources : MonoBehaviour {
 	PlanetInfo info;
 	[SerializeField] float collectionSpeed = 2f;
     [SerializeField] int pointsGained = 4;
-	private const string Name = "_Lerp";
+	private const string Name = "_CutOff";
 	public float lava;
 	public float water;
-	public float ores;
+	//public float ores;
 	public float maxLava = 150f;
 	public float maxWater = 150f;
-	public float maxOres = 150f;
+	//public float maxOres = 150f;
 	public bool FullLava {
 		get {
 			return lava >= maxLava;
@@ -24,14 +24,14 @@ public class BarrenResources : MonoBehaviour {
 			return water >= maxWater;
 		}
 	}
-	public bool FullOres {
-		get {
-			return ores >= maxOres;
-		}
-	}
+	//public bool FullOres {
+	//	get {
+	//		return ores >= maxOres;
+	//	}
+	//}
 	public float PlanetHealth {
 		get {
-			return (lava + water + ores) / (maxLava + maxWater + maxOres);
+			return (lava + water) / (maxLava + maxWater );
 		}
 	}
 	public Material mat;
@@ -46,26 +46,40 @@ public class BarrenResources : MonoBehaviour {
 
 
 	public void AddResources(PlayerResources playerResources) {
-		if((playerResources.HasOres || playerResources.HasLava || playerResources.HasWater) && (!FullLava || !FullOres || !FullWater)) {
-            float collected = collectionSpeed * Time.deltaTime;
-			AddOres(playerResources,collected);
-            AddLava(playerResources,collected);
-			AddWater(playerResources,collected);
+		if((playerResources.HasLava || playerResources.HasWater) && (!FullLava  || !FullWater)) {
+			playerResources.PlayGiving();
+			float collected = collectionSpeed * Time.deltaTime;
+		//	AddOres(playerResources, collected);
+			AddLava(playerResources, collected);
+			AddWater(playerResources, collected);
 			// curveTime += collectionSpeed * Time.deltaTime;
 			// curveTime = Mathf.Clamp(curveTime, 0, 1f);
-			life = (lava + water + ores) / (maxLava + maxWater + maxOres);
-			mat.SetFloat(Name, life);
-			if(life > 0) {
+			CalculateLife();
+			
+			if (life > 0) {
 				//print(curveTime);
 				GameManager.Gm.AddScore(pointsGained);
 			}
-			if(FullLava && FullOres && FullWater && !gotBonus) {
+			if (FullLava && FullWater && !gotBonus) {
 				print("FINISHED");
 				GameManager.Gm.AddScore(pointsGained * 100);
-				SpriteManager.instance.UseParticles(transform.position, "Celebrate",info);
+				Finished();
+				SpriteManager.instance.UseParticles(transform.position, Vector3.zero, "Celebrate", info);
 				gotBonus = true;
 			}
 		}
+		else {
+			playerResources.StopGiving();
+		}
+	}
+
+	private void CalculateLife() {
+		life = (lava + water) / (maxLava + maxWater );
+		mat.SetFloat(Name, life);
+	}
+
+	private void Finished() {
+		//bring up foliage particles//clouds or static texture and scale
 	}
 
 	private void AddLava(PlayerResources playerResources,float collected) {
@@ -102,28 +116,45 @@ public class BarrenResources : MonoBehaviour {
 	}
 
 
-	private void AddOres(PlayerResources playerResources,float collected) {
-		if(playerResources.HasOres && !FullOres) {
-			// float collected = Mathf.SmoothStep(0, playerResources.Ores, curve.Evaluate(curveTime));
-			playerResources.Ores -= collected;
-			ores += collected;
-			if(playerResources.Ores < 0.5f) {
-				playerResources.Ores = 0f;
-				ores = Mathf.Clamp(Mathf.Ceil(ores), 0, maxOres);
-			}
-		}
-		else {//FULL
-			ores = Mathf.Clamp(ores, 0, maxOres);
-			playerResources.Ores = Mathf.Ceil(playerResources.Ores);
-		}
-	}
+	//private void AddOres(PlayerResources playerResources,float collected) {
+	//	if(playerResources.HasOres && !FullOres) {
+	//		// float collected = Mathf.SmoothStep(0, playerResources.Ores, curve.Evaluate(curveTime));
+	//		playerResources.Ores -= collected;
+	//		ores += collected;
+	//		if(playerResources.Ores < 0.5f) {
+	//			playerResources.Ores = 0f;
+	//			ores = Mathf.Clamp(Mathf.Ceil(ores), 0, maxOres);
+	//		}
+	//	}
+	//	else {//FULL
+	//		ores = Mathf.Clamp(ores, 0, maxOres);
+	//		playerResources.Ores = Mathf.Ceil(playerResources.Ores);
+	//	}
+	//}
 
 	public void Setup(PlanetInfo info) {
 		this.info = info;
 		maxLava = info.maxLava;
-		maxOres = info.maxOres;
+		//maxOres = info.maxOres;
 		maxWater = info.maxWater;
 		mat.SetFloat(Name, life);
 
+	}
+
+	public void AstroidHit(){
+		lava -= lava / 3;
+		water -= water / 3;
+		//ores -= ores / 3;
+		lava = Mathf.Clamp(lava, 0, maxLava);
+		water = Mathf.Clamp(water, 0, maxWater);
+		//ores = Mathf.Clamp(ores, 0, maxOres);
+		StartCoroutine(PlanetHit());
+		CalculateLife();
+	}
+
+	IEnumerator PlanetHit(){
+		mat.SetFloat("_Flash", 1);
+		yield return new WaitForSeconds(0.1f);
+		mat.SetFloat("_Flash", 0);
 	}
 }

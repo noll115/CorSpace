@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
-using System.Collections.Generic;
 using System.Text;
+using UnityEngine.UI;
 using TMPro;
 
 public class GameManager : MonoBehaviour {
@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour {
 	static GameManager gameManager;
 	public static GameManager Gm {
 		get {
-			if(gameManager == null) {
+			if (gameManager == null) {
 				gameManager = new GameObject("GameManager").AddComponent<GameManager>();
 				return gameManager;
 			}
@@ -19,39 +19,49 @@ public class GameManager : MonoBehaviour {
 			}
 		}
 	}
-	public PlayerResources player;
-	public SpaceGenerator sg;
+	public RocketController player;
+	public SpaceGenerator spaceGenerator;
 	public bool generateOnStart;
 	public int score;
+	public int NumOfPlanetsRevived;
+	public int NumOfPlanetsDead;
 	public TextMeshProUGUI scoreNum;
-	public GameObject button;
+	public Button retryButton;
+	public Button quitButton;
 	public GameObject scoreGUI;
-	public GameObject quitButton;
 	public GameObject[] gOs;
+	public Transition transition;
+	HighScoreManager hsManager;
 	StringBuilder sb;
 
 
-
-
 	private void Awake() {
-		player = FindObjectOfType<PlayerResources>();
-		if(gameManager != null && gameManager != this) {
+		if (gameManager != null && gameManager != this) {
 			Destroy(gameObject);
 			return;
 		}
 		else {
 			gameManager = this;
 		}
-		sg = GetComponent<SpaceGenerator>();
-		player.OnPlayerDeath += PlayerDead;
-		if(generateOnStart) {
-			sg.Generate();
+		if (generateOnStart) {
+			spaceGenerator.Generate();
 		}
+		retryButton.onClick.AddListener(LoadLevel);
+#if UNITY_STANDALONE
+		quitButton.onClick.AddListener(Quit);
+#endif
+		hsManager = GetComponent<HighScoreManager>();
 		sb = new StringBuilder(score.ToString("00000"));
 	}
 
+	private void Start() {
+		player = FindObjectOfType<RocketController>();
+		player.pResources.OnPlayerDeath += PlayerDead;
+		transition.FromBlack();
+	}
+
 	public void AddScore(int incScore) {
-		if(incScore < 0) {
+		if (incScore < 0) {
 			scoreNum.color = Color.red;
 		}
 		else {
@@ -65,29 +75,46 @@ public class GameManager : MonoBehaviour {
 
 
 	public void PlayerDead() {
-		player.gameObject.SetActive(false);
 		SoundManager.instance.StopAllSounds();
 		SoundManager.instance.PlaySound2D("lose");
 		StartCoroutine(StartFade());
 	}
-
 	IEnumerator StartFade() {
-		for(int i = 0;i < gOs.Length;i++) {
+		for (int i = 0; i < gOs.Length; i++) {
 			gOs[i].SetActive(false);
 		}
 		yield return new WaitForSeconds(1f);
-		button.SetActive(true);
-		quitButton.SetActive(true);
+		hsManager.GetHighScores();
+		retryButton.gameObject.SetActive(true);
+#if UNITY_STANDALONE
+		quitButton.gameObject.SetActive(true);
+#endif
+		hsManager.gameObject.SetActive(true);
 		scoreGUI.GetComponent<RectTransform>().anchoredPosition = new Vector3(0, -384);
 	}
 
 	public void LoadLevel() {
-		SceneManager.LoadScene(0);
+		transition.ToBlack();
+		StartCoroutine(StartLoading());
+	}
+
+	IEnumerator StartLoading() {
+		bool animended = false;
+		while (!animended) {
+			if (!transition.inTransition) {
+				animended = true;
+			}
+			yield return null;
+		}
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 	}
 
 	public void Quit() {
 		Application.Quit();
 	}
-	
+
 
 }
+
+
+

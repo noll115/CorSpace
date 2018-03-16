@@ -58,7 +58,7 @@ Transform:
   m_GameObject: {fileID: 1835990021683702}
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 10}
-  m_LocalScale: {x: 3, y: 1, z: 3}
+  m_LocalScale: {x: 5, y: 1, z: 5}
   m_Children: []
   m_Father: {fileID: 4751876792242420}
   m_RootOrder: 0
@@ -172,8 +172,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 018093773d2d0ca47acf509ddca8ec18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Damp: 100
-  con: {fileID: 0}
+  Damp: 80
+  obj: {fileID: 0}
   mat: {fileID: 0}
   txt: _MainTex
 --- !u!114 &114248461937576216
@@ -207,7 +207,7 @@ MonoBehaviour:
   m_DefaultBlend:
     m_Style: 1
     m_Time: 2
-  m_CustomBlends: {fileID: 11400000, guid: 51dee70630004a445b69c68bb63694ff, type: 2}
+  m_CustomBlends: {fileID: 0}
   m_CameraCutEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -229,12 +229,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5462a748ae5ef3444b77530a3a544582, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  quickShakeSpeed: 0
   player: {fileID: 0}
   mainCam: {fileID: 0}
   groupCam: {fileID: 0}
   startCam: {fileID: 0}
   group: {fileID: 0}
+  mainCamNoise: {fileID: 0}
+  groupCamNoise: {fileID: 0}
 --- !u!124 &124772004748308724
 Behaviour:
   m_ObjectHideFlags: 1

@@ -7,43 +7,40 @@ public class Planet : MonoBehaviour {
 
 	static GameObject parent;
 	public SpriteRenderer planetSprite;
-	public float planetRad = 2.95f;
 	public PlanetInfo planetInfo;
-	public RocketController con;
+	protected RocketController con;
 	public LayerMask mask;
 	public bool playerOnPlanet;
 	public bool playerAction;
-	public PointEffector2D pEffector;
-	public Rigidbody2D rigid;
-	public CircleCollider2D trig;
+	[HideInInspector]public Rigidbody2D rigid;
+	[HideInInspector]public CircleCollider2D trig;
 	public GameObject Asteroid;
 	public Planets planetType;
 	[Range(0, 10)] public int numOfAsteroids;
 	Transform[] asteroids;
 	public float rot;
 	public float rotSpeed;
-	public Vector3 initPos;
-	public List<Transform> obsOnPlanet;
+	protected float playerInitPos;
+	[HideInInspector]public List<Transform> obsOnPlanet;
+	ContactPoint2D[] contactPoints = new ContactPoint2D[1];
 	bool madeJoints = false;
 
-	private void Awake() {
+	protected virtual void Awake() {
 		if (!parent) {
 			parent = new GameObject("Planets");
 		}
 		transform.SetParent(parent.transform, true);
-		pEffector = GetComponent<PointEffector2D>();
 		rigid = GetComponent<Rigidbody2D>();
 		trig = GetComponent<CircleCollider2D>();
-		planetRad = planetRad * transform.localScale.x;
 	}
 
 
-	private void FixedUpdate() {
+	protected virtual void FixedUpdate() {
 		rot += rotSpeed * Time.deltaTime;
 		rot %= 360;
 		rigid.rotation = rot;
 		for (int i = 0; i < obsOnPlanet.Count; i++) {
-			obsOnPlanet[i].transform.RotateAround(transform.position, Vector3.forward, rotSpeed * Time.deltaTime);//transform.position + new Vector3(Mathf.Cos(rot * Mathf.Deg2Rad) * planetRad, Mathf.Sin(rot * Mathf.Deg2Rad) * planetRad);
+			obsOnPlanet[i].transform.RotateAround(transform.position, Vector3.forward, rotSpeed * Time.deltaTime);
 		}
 	}
 
@@ -73,7 +70,7 @@ public class Planet : MonoBehaviour {
 		int asteroidsNum = 0;
 		for (float angle = 0; angle < (Mathf.PI * 2); angle += asteroidAngle) {
 			rndOffset = Random.Range(-asteroidAngle / 2, asteroidAngle / 2);
-			asteroidRange = Random.Range(trig.radius * transform.localScale.x, (trig.radius + 2f) * transform.localScale.x);
+			asteroidRange = Random.Range((trig.radius * transform.localScale.x)-2f, (trig.radius) * transform.localScale.x);
 			asteroidLoc = new Vector2(Mathf.Cos(angle + rndOffset), Mathf.Sin(angle + rndOffset)).normalized;
 			asteroidLoc *= asteroidRange;
 			asteroid = Instantiate(Asteroid).GetComponent<Asteroid>();
@@ -94,7 +91,7 @@ public class Planet : MonoBehaviour {
 			//Debug.DrawLine(player.position, player.position + dist.normalized * dist.sqrMagnitude);
 			Debug.DrawRay(player.position, -player.up);
 			Debug.DrawRay(hit.point, hit.normal);
-			if (hit && !Input.GetButton("Thrust")) {
+			if (hit && !Input.GetButton("Thrust") && !Input.GetButton("Horizontal")) {
 				RotatePlayer(hit, dist);
 			}
 		}
@@ -102,10 +99,11 @@ public class Planet : MonoBehaviour {
 
 
 	private void RotatePlayer(RaycastHit2D hit, Vector3 dist) {
-		float angleDif = Vector2.SignedAngle(con.transform.up, hit.normal);
-		float playerDist = 1 - dist.sqrMagnitude / initPos.sqrMagnitude;
-		con.rigid.rotation = Mathf.Lerp(con.rigid.rotation, angleDif + con.rigid.rotation, playerDist / 10);
-		if (playerOnPlanet && Mathf.Abs(angleDif) < 2 && con.velocity.sqrMagnitude < 4 && !Input.GetButton("Thrust")) {
+		float angleDif = Vector2.SignedAngle(con.transform.up, hit.normal) ;
+		float playerDist = 1 - dist.sqrMagnitude / playerInitPos;
+		//print(playerDist);
+		con.rigid.rotation = Mathf.Lerp(con.rigid.rotation, (angleDif*Time.deltaTime) + con.rigid.rotation, playerDist );
+		if (playerOnPlanet && Mathf.Abs(angleDif) < 2 && con.rigid.velocity.sqrMagnitude < 4 && !Input.GetButton("Thrust")) {
 			//RotateWithPlanet(con);
 			if (!madeJoints) {
 				con.MakeJoints(rigid);
@@ -116,6 +114,7 @@ public class Planet : MonoBehaviour {
 			PlayerAction(con.pResources);
 		}
 		else {
+			
 			madeJoints = false;
 			con.canRotate = true;
 			playerAction = false;
@@ -125,15 +124,12 @@ public class Planet : MonoBehaviour {
 	protected virtual void OnTriggerEnter2D(Collider2D collision) {
 		if (collision.CompareTag("Player")) {
 			con = collision.GetComponentInParent<RocketController>();
-			initPos = (transform.position - con.transform.position);
+			playerInitPos = (transform.position - con.transform.position).sqrMagnitude;
 			con.PlanetOn = this;
-		}
-		if (collision.CompareTag("Asteroid")) {
-			GetComponentInParent<Asteroid>().hit = true;
 		}
 	}
 
-	private void OnTriggerExit2D(Collider2D collision) {
+	protected virtual void OnTriggerExit2D(Collider2D collision) {
 		if (collision.CompareTag("Player")) {
 			con.PlanetOn = null;
 			con = null;
@@ -142,13 +138,14 @@ public class Planet : MonoBehaviour {
 
 	protected virtual void OnCollisionEnter2D(Collision2D collision) {
 		if (collision.collider.CompareTag("Player") && con) {
+			collision.GetContacts(contactPoints);
 			playerOnPlanet = true;
-			SoundManager.instance.PlaySound3D("landsound", collision.contacts[0].point);
+			SoundManager.instance.PlaySound3D("landsound", contactPoints[0].point);
 			//print("colliding");
 		}
 	}
 
-	private void OnCollisionStay2D(Collision2D collision) {
+	protected virtual void OnCollisionStay2D(Collision2D collision) {
 		if (Input.GetButton("Thrust")) {
 			if (madeJoints) {
 				con.DisableJoints();
@@ -158,13 +155,17 @@ public class Planet : MonoBehaviour {
 
 
 
-	private void OnCollisionExit2D(Collision2D collision) {
+	protected virtual void OnCollisionExit2D(Collision2D collision) {
 		if (collision.collider.CompareTag("Player")) {
 			playerOnPlanet = false;
 			if (con) {
 				con.canRotate = true;
 			}
 		}
+	}
+
+	public virtual void AstroidHit(){
+		
 	}
 
 	public virtual void PlayerAction(PlayerResources presource) {
@@ -185,12 +186,23 @@ public class Planet : MonoBehaviour {
 	private void OnEnable() {
 		if (asteroids != null) {
 			for (int i = 0; i < asteroids.Length; i++) {
-				asteroids[i].gameObject.SetActive(true);
+				if (asteroids[i])
+					asteroids[i].gameObject.SetActive(true);
 			}
 		}
 		if (obsOnPlanet != null) {
 			for (int i = 0; i < obsOnPlanet.Count; i++) {
-				obsOnPlanet[i].gameObject.SetActive(true);
+				if (obsOnPlanet[i])
+					obsOnPlanet[i].gameObject.SetActive(true);
+			}
+		}
+	}
+
+	public void RemoveAstroid(Asteroid asteroid) {
+		for (int i = 0; i < asteroids.Length; i++) {
+			if (asteroid == asteroids[i]) {
+				asteroids[i] = null;
+				return;
 			}
 		}
 	}

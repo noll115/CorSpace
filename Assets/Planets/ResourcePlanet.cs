@@ -4,21 +4,22 @@ using UnityEngine;
 
 public class ResourcePlanet : Planet {
 
-	public PlanetResources resources;
+	public PlanetResources pResources;
 
 	public override void SetUpPlanet(PlanetInfo p) {
 		base.SetUpPlanet(p);
-		resources = GetComponent<PlanetResources>();
-		resources.Setup(p);
+		pResources = GetComponent<PlanetResources>();
+		pResources.Setup(p);
 	}
 
 	public override void PlayerAction(PlayerResources pResources) {
-		resources.SubtractResources(pResources);
-		planetInfo.UpdateData(resources);
+		this.pResources.SubtractResources(pResources);
+		planetInfo.UpdateData(this.pResources);
 	}
 
-	private void OnBecameVisible() {
-
+	public override void AstroidHit() {
+		pResources.AstroidHit();
+		planetInfo.UpdateData(pResources);
 	}
 
 
