@@ -10,6 +10,8 @@
 ## How to play:
    - :arrow_left: and :arrow_right: arrows to rotate the ship
    - Press spacebar to thrust the ship
+   - Land on the colorful planets to take a share of resources.
+   - Land on gray planets to drop off resources
 ## Play the Game:
    - The game is hosted on [Itch.io](https://noll115.itch.io/corspace)
 ## Built With:
