@@ -1,8 +1,8 @@
 
 ![Corspace Title](/images/title.PNG)
 # CMPM 80K Final Group Project - CorSpace
-  - Programmer: @noll115
-  - Artist: Aimxex
+  - Programmer: Me
+  - Artist: [Aimxex](https://www.linkedin.com/in/ana-martin-28b71215a/)
 
 ## The Game:
    - You are a corgi:dog2: who is tasked with saving the dying planets by splitting the resources of
