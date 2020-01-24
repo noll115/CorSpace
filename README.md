@@ -1,5 +1,5 @@
 
-![Corspace Title](/images/title.png)
+![Corspace Title](/images/title.PNG)
 # CMPM 80K Final Group Project - CorSpace
   - Programmer: @noll115
   - Artist: Aimxex
